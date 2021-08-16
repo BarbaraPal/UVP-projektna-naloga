@@ -13,29 +13,44 @@ class Matrika:
             ", ".join([str(i) for i in line]) 
             for line in self.matrika
         )
-   
+
     def dodaj_stevilo(self, stevilo, vrstica, stolpec):
         '''Doda število v matriko (ali že obstoječe število spremeni v drugo).'''
-        if str(stevilo) not in '123456789' or len(str(stevilo)) != 0:
+        if str(stevilo) not in '123456789' or str(vrstica) not in '123456789' or str(stolpec) not in '123456789':
+            raise ValueError('Prosimo, da za vrstice, stolpce in števila izbirate števila od 1 do 9.')
+        else: 
+            stevilo = int(stevilo)
+            vrstica = int(vrstica)
+            stolpec = int(stolpec)
+        if len(str(stevilo)) != 1:
             raise ValueError(f'{stevilo} ni primeren znak. Prosim izberite število od 1 do 9.')
-        elif vrstica > 8 or vrstica < 0:
+        elif int(vrstica) > 9 or int(vrstica) < 1:
             raise ValueError('Ta vrstica ne obstaja.')
-        elif stolpec > 8 or stolpec < 0:
+        elif int(stolpec) > 9 or int(stolpec) < 1:
             raise ValueError('Ta stolpec ne obstaja.')
         else:
-            self.matrika[vrstica][stolpec] = int(stevilo)
+            self.matrika[vrstica - 1][stolpec - 1] = stevilo
 
     def odstrani_stevilo(self, vrstica, stolpec):
         '''Odstrani število v matriki in ga nadomesti z vrednostjo None.'''
-        if self.matrika[vrstica][stolpec] == None:
+        if str(vrstica) not in '123456789' or str(stolpec) not in '123456789':
+            raise ValueError('Prosimo, da za vrstice, stolpce in števila izbirate števila od 1 do 9.')
+        else:
+            vrstica = int(vrstica)
+            stolpec = int(stolpec)
+        if self.matrika[vrstica - 1][stolpec - 1] == None:
             pass
-        elif vrstica > 8 or vrstica < 0:
+        elif vrstica > 9 or vrstica < 1:
             raise ValueError('Ta vrstica ne obstaja.')
-        elif stolpec > 8 or stolpec < 0:
+        elif stolpec > 9 or stolpec < 1:
             raise ValueError('Ta stolpec ne obstaja.')
         else:
-            self.matrika[vrstica][stolpec] = None
-    
+            self.matrika[vrstica - 1][stolpec - 1] = None
+
+    def izbrisi_cel_sudoku(self):
+        self.matrika = [9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None]]
+        return self.matrika
+
     def preveri_ustreznost_vrstic(self):
         '''Preveri če v nobeni vrstici katero od števil ni zapisano več kot enkrat.'''
         for i in range(9):
@@ -137,7 +152,16 @@ class Matrika:
 
 
     def resevanje(self):
-        pass
+        matrika_vseh_moznosti = iskanje_matrike_vseh_moznosti(self)
+        for i in range(9):
+            for j in range(9):
+                for k in range(len(matrika_vseh_moznosti[i][j])):
+                    if len(matrika_vseh_moznosti[i][j]) == 1:
+                        pass
+                    else:
+                        self.matrika[i][j] = matrika_vseh_moznosti[i][j][k]
+                        matrika_vseh_moznosti[i][j] -= matrika_vseh_moznosti[i][j][k]
+
 
     def resi(self):
         if preveri_ali_je_dovolj_stevil(self) != True:
