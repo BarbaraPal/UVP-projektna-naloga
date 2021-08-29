@@ -1,17 +1,17 @@
-from model import Matrika
+from model import Uporabnik, Matrika
+
 
 IME_DATOTEKE = "stanje.json"
 try:
-    matrika = Matrika.preberi_iz_datoteke(IME_DATOTEKE)
+    matrika = Uporabnik.nalozi_matriko(IME_DATOTEKE)
 except FileNotFoundError:
-    matrika = Matrika([9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None], 9 * [None]])
+    matrika = Matrika([9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0]])
 
 RESI = 1
-NAMIG = 2
-DODAJ_STEVILO = 3
-ODSTRANI_STEVILO = 4
-IZBRISI = 5
-IZHOD = 6
+DODAJ_STEVILO = 2
+ODSTRANI_STEVILO = 3
+IZBRISI = 4
+IZHOD = 5
 
 def preberi_stevilo():
     while True:
@@ -39,14 +39,12 @@ def prikazi_pozdravno_sporocilo():
 
 def prikaz_matrike(matrika):
     print(matrika.__str__())
-    return matrika.__str__()
 
 def osnovni_zaslon():
     prikaz_matrike(matrika)
     while True:
         ukaz = preberi_ukaz([
             (RESI, 'reši sudoku'),
-            (NAMIG, 'namig'),
             (DODAJ_STEVILO, 'dodaj število'),
             (ODSTRANI_STEVILO, 'odstrani število'),
             (IZBRISI, 'izbriši ta sudoku'),
@@ -54,8 +52,6 @@ def osnovni_zaslon():
         ])
         if ukaz == RESI:
             resi_sudoku()
-        elif ukaz == NAMIG:
-            daj_namig()
         elif ukaz == DODAJ_STEVILO:
             dodaj_stevilo()
         elif ukaz == ODSTRANI_STEVILO:
@@ -71,7 +67,7 @@ def osnovni_zaslon():
 
 def resi_sudoku():
     matrika.resi()
-    print(matrika)
+    prikaz_matrike(matrika)
 
 def dodaj_stevilo():
     print('V katero vrstico bi radi vnesli število?')
