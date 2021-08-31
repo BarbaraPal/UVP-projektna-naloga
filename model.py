@@ -22,8 +22,8 @@ class Uporabnik:
         }
         with open(ime_datoteke, 'w') as datoteka:
             json.dump(slovar_podatkov, datoteka, ensure_ascii=False, indent=4)
-  
-    def nalozi_matriko(ime_datoteke):
+    @classmethod  
+    def nalozi_matriko(cls, ime_datoteke):
         with open(ime_datoteke) as datoteka:
             slovar_podatkov = json.load(datoteka)
         uporabnisko_ime = slovar_podatkov['uporabnisko_ime']
@@ -32,9 +32,8 @@ class Uporabnik:
         uporabnik = cls.uporabnisko_ime, cls.geslo, cls.matrika
         return uporabnik
 
-
 class Matrika:
-    def __init__(self, matrika):
+    def __init__(self, matrika=[9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0]]):
         self.matrika = [line[:] for line in matrika] 
         self.visina = len(self.matrika)
         self.sirina = len(self.matrika[0])
@@ -80,7 +79,7 @@ class Matrika:
 
     def izbrisi_cel_sudoku(self):
         self.matrika = [9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0]]
-        return self.matrika
+        return Matrika(self.matrika)
 
     def najdi_naslednjo_prazno_celico(self, vrstica, stolpec):
         for i in range(vrstica - 1, 9):
@@ -122,4 +121,4 @@ class Matrika:
         if self.resevanje() == False:
             raise ValueError('Sudokuja ni mogoče rešiti. Preverite ali ste pravilno vnesli vsa števila.')
         else:
-            return self.matrika
+            return Matrika(self.matrika)
