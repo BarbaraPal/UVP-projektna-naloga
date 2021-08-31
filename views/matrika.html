@@ -1,15 +1,15 @@
 % rebase('base.html', trenutna_stran='matrika')    
 <table>
   <tr>
-    <th><input class="form-control" type="number" id="11" name="11" value=0 min=0 max=9 style="background-color:royalblue;"></th>
-    <th><input class="form-control" type="number" id="12" name="12" value=0 min=0 max=9 style="background-color:royalblue;"></th>
-    <th><input class="form-control" type="number" id="13" name="13" value=0 min=0 max=9 style="background-color:royalblue;"></th>
-    <th><input class="form-control" type="number" id="14" name="14" value=0 min=0 max=9 style="background-color:blue;"></th>
-    <th><input class="form-control" type="number" id="15" name="15" value=0 min=0 max=9 style="background-color:blue;"></th>
-    <th><input class="form-control" type="number" id="16" name="16" value=0 min=0 max=9 style="background-color:blue;"></th>
-    <th><input class="form-control" type="number" id="17" name="17" value=0 min=0 max=9 style="background-color:royalblue;"></th>
-    <th><input class="form-control" type="number" id="18" name="18" value=0 min=0 max=9 style="background-color:royalblue;"></th>
-    <th><input class="form-control" type="number" id="19" name="19" value=0 min=0 max=9 style="background-color:royalblue;"></th>
+    <th><input class="input" type="number" id="enaena" name="enaena" value=0 min=0 max=9 style="background-color:royalblue;"></th>
+    <th><input class="input" type="number" id="12" name="12" value=0 min=0 max=9 style="background-color:royalblue;"></th>
+    <th><input class="input" type="number" id="13" name="13" value=0 min=0 max=9 style="background-color:royalblue;"></th>
+    <th><input class="input" type="number" id="14" name="14" value=0 min=0 max=9 style="background-color:blue;"></th>
+    <th><input class="input" type="number" id="15" name="15" value=0 min=0 max=9 style="background-color:blue;"></th>
+    <th><input class="input" type="number" id="16" name="16" value=0 min=0 max=9 style="background-color:blue;"></th>
+    <th><input class="input" type="number" id="17" name="17" value=0 min=0 max=9 style="background-color:royalblue;"></th>
+    <th><input class="input" type="number" id="18" name="18" value=0 min=0 max=9 style="background-color:royalblue;"></th>
+    <th><input class="input" type="number" id="19" name="19" value=0 min=0 max=9 style="background-color:royalblue;"></th>
   </tr>
   <tr>
     <td><input class="input" type="number" id="21" name="21" value=0 min=0 max=9 style="background-color:royalblue;"></td>
@@ -103,14 +103,14 @@
 <table>
   <tr>
     <td>
-      <form action="/resen_sudoku/">
+      <form action="/resen_sudoku/", method="POST">
         <input type="submit" value="Reši sudoku">
       </form>
     </td>
   </tr>
   <tr>
     <td>
-      <form action="/matrika/">
+      <form action="/matrika/", method="POST">
         <input type="submit" value="Izbriši sudoku">
       </form>
     </td>
