@@ -4,6 +4,10 @@ import os
 from model import Uporabnik, Matrika
 
 
+@bottle.get("/")
+def zacetna_stran():
+    bottle.redirect("/matrika/")
+
 @bottle.get("/matrika/")
 def prikaz_matrike():
     return bottle.template('matrika.html')
