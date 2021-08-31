@@ -3,19 +3,18 @@ import hashlib
 import os
 from model import Uporabnik, Matrika
 
-
 @bottle.get("/")
 def zacetna_stran():
     bottle.redirect("/matrika/")
-
+    
 @bottle.get("/matrika/")
 def prikaz_matrike():
     return bottle.template('matrika.html')
 
-@bottle.get("/resen_sudoku/")
+@bottle.post("/resen_sudoku/")
 def resevanje_sudokuja():
     matrika = [
-        [bottle.BaseRequest.query('11'), bottle.BaseRequest.query('12'), bottle.BaseRequest.query('13'), bottle.BaseRequest.query('14'), bottle.BaseRequest.query('15'), bottle.BaseRequest.query('16'), bottle.BaseRequest.query('17'), bottle.BaseRequest.query('18'), bottle.BaseRequest.query('19')],
+        [bottle.request.query.enaena, bottle.BaseRequest.query('12'), bottle.BaseRequest.query('13'), bottle.BaseRequest.query('14'), bottle.BaseRequest.query('15'), bottle.BaseRequest.query('16'), bottle.BaseRequest.query('17'), bottle.BaseRequest.query('18'), bottle.BaseRequest.query('19')],
         [bottle.BaseRequest.query('21'), bottle.BaseRequest.query('22'), bottle.BaseRequest.query('23'), bottle.BaseRequest.query('24'), bottle.BaseRequest.query('25'), bottle.BaseRequest.query('26'), bottle.BaseRequest.query('27'), bottle.BaseRequest.query('28'), bottle.BaseRequest.query('29')],
         [bottle.BaseRequest.query('31'), bottle.BaseRequest.query('32'), bottle.BaseRequest.query('33'), bottle.BaseRequest.query('34'), bottle.BaseRequest.query('35'), bottle.BaseRequest.query('36'), bottle.BaseRequest.query('37'), bottle.BaseRequest.query('38'), bottle.BaseRequest.query('39')],
         [bottle.BaseRequest.query('41'), bottle.BaseRequest.query('42'), bottle.BaseRequest.query('43'), bottle.BaseRequest.query('44'), bottle.BaseRequest.query('45'), bottle.BaseRequest.query('46'), bottle.BaseRequest.query('47'), bottle.BaseRequest.query('48'), bottle.BaseRequest.query('49')],
@@ -32,4 +31,9 @@ def resevanje_sudokuja():
 def brisanje_sudokuja():
     trenutni_uporabnik().matrika = izbrisi_cel_sudoku()
     bottle.redirect("/matrika/")
+
+from bottle import error
+@error(404)
+def error404(error):
+    return 'Ta stran ne obstaja!'
 bottle.run(debug=True, reloader=True)
