@@ -3,7 +3,6 @@ import hashlib
 import os
 from model import Uporabnik, Matrika
 
-
 @bottle.get("/")
 def zacetna_stran():
     bottle.redirect("/matrika/")
@@ -28,10 +27,14 @@ def resevanje_sudokuja():
         [int(bottle.request.forms['m71']), int(bottle.request.forms['m72']), int(bottle.request.forms['m73']), int(bottle.request.forms['m74']), int(bottle.request.forms['m75']), int(bottle.request.forms['m76']), int(bottle.request.forms['m77']), int(bottle.request.forms['m78']), int(bottle.request.forms['m79'])],
         [int(bottle.request.forms['m81']), int(bottle.request.forms['m82']), int(bottle.request.forms['m83']), int(bottle.request.forms['m84']), int(bottle.request.forms['m85']), int(bottle.request.forms['m86']), int(bottle.request.forms['m87']), int(bottle.request.forms['m88']), int(bottle.request.forms['m89'])],
         [int(bottle.request.forms['m91']), int(bottle.request.forms['m92']), int(bottle.request.forms['m93']), int(bottle.request.forms['m94']), int(bottle.request.forms['m95']), int(bottle.request.forms['m96']), int(bottle.request.forms['m97']), int(bottle.request.forms['m98']), int(bottle.request.forms['m99'])]]
-    #self.matrika = matrika
-    #resen_sudoku = matrika.resi()
-    return bottle.template('resen_sudoku.html', celamatrika=matrika)
-
+    matrika = Matrika(matrika)
+    resen_sudoku = matrika.resi()
+    resen_sudoku_po_vrsticah = str(resen_sudoku).split('\n')
+    mat = []
+    for j in range(9):
+        for i in range(9):
+            mat += resen_sudoku_po_vrsticah[j][3 * i]
+    return bottle.template('resen_sudoku.html', celamatrika=mat)
 
 @bottle.post("/matrika/")
 def brisanje_sudokuja():

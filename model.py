@@ -33,8 +33,8 @@ class Uporabnik:
         return uporabnik
 
 class Matrika:
-    def __init__(self, matrika=[9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0]]):
-        self.matrika = [line[:] for line in matrika] 
+    def __init__(self, matrika):
+        self.matrika = matrika
         self.visina = len(self.matrika)
         self.sirina = len(self.matrika[0])
 
@@ -82,8 +82,8 @@ class Matrika:
         return Matrika(self.matrika)
 
     def najdi_naslednjo_prazno_celico(self, vrstica, stolpec):
-        for i in range(vrstica - 1, 9):
-            for j in range(stolpec - 1, 9):
+        for i in range(vrstica, 9):
+            for j in range(stolpec, 9):
                 if self.matrika[i][j] == 0:
                     return i, j
         for i in range(0,9):
@@ -93,11 +93,11 @@ class Matrika:
         return -1, -1
 
     def preveri_ustreznost(self, vrstica, stolpec, stevilo):
-        vrsticaok = all([stevilo != self.matrika[vrstica - 1][j] for j in range(9)])
+        vrsticaok = all([stevilo != self.matrika[vrstica][j] for j in range(9)])
         if vrsticaok:
-            stolpecok = all([stevilo != self.matrika[i][stolpec - 1] for i in range(9)])
+            stolpecok = all([stevilo != self.matrika[i][stolpec] for i in range(9)])
             if stolpecok:
-                vrst, stol = 3 * ((vrstica - 1) // 3), 3 * ((stolpec - 1) // 3)
+                vrst, stol = 3 * ((vrstica) // 3), 3 * ((stolpec) // 3)
                 for i in range(vrst, vrst + 3):
                     for j in range(stol, stol + 3):
                         if self.matrika[i][j] == stevilo:
@@ -105,16 +105,16 @@ class Matrika:
                 return True
         return False
 
-    def resevanje(self, vrstica=1, stolpec=1):
+    def resevanje(self, vrstica=0, stolpec=0):
         vrstica, stolpec = self.najdi_naslednjo_prazno_celico(vrstica, stolpec)
         if vrstica == -1:
             return True
         for stevilo in range(1,10):
             if self.preveri_ustreznost(vrstica, stolpec, stevilo):
-                self.matrika[vrstica - 1][stolpec - 1] = stevilo
+                self.matrika[vrstica][stolpec] = stevilo
                 if self.resevanje(vrstica, stolpec):
                     return True
-                self.matrika[vrstica - 1][stolpec - 1] = 0
+                self.matrika[vrstica][stolpec] = 0
         return False
 
     def resi(self):
