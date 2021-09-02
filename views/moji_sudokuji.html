@@ -1,0 +1,18 @@
+% rebase('base.html')
+<table class="table" style="width: 100%;">
+    <thead>
+      <tr>
+        <th>REŠENI SUDOKUJI</th>
+      </tr>
+    </thead>
+    <tbody>
+    % for x in seznam_matrik:
+        <tr>
+          <td>{{x}}</td>
+        </tr>
+    % end
+    </tbody>
+</table>
+<form method="GET" action="/matrika/">
+    <input class="button" type = "submit" value = "Nazaj" />
+</form>

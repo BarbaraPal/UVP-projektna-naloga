@@ -1,15 +1,16 @@
 import json
 
 class Uporabnik:
-    def __init__(self, uporabnisko_ime, geslo, matrika):
+    def __init__(self, uporabnisko_ime, geslo, seznam_matrik):
         self.uporabnisko_ime = uporabnisko_ime
         self.geslo = geslo
-        self.matrika = matrika
+        self.seznam_matrik = seznam_matrik
 
     def preveri_geslo(self, geslo):
         if self.geslo != geslo:
             raise ValueError('Napačno geslo!')
 
+    @staticmethod
     def preveri_enakost_gesel(geslo1, geslo2):
         if geslo1 != geslo2:
             raise ValueError('Gesli se ne ujemata!')
@@ -18,19 +19,19 @@ class Uporabnik:
         slovar_podatkov = {
             'uporabnisko_ime': self.uporabnisko_ime,
             'geslo': self.geslo,
-            'matrika': self.matrika,
+            'seznam_matrik': self.seznam_matrik,
         }
         with open(ime_datoteke, 'w') as datoteka:
             json.dump(slovar_podatkov, datoteka, ensure_ascii=False, indent=4)
+
     @classmethod  
     def nalozi_matriko(cls, ime_datoteke):
         with open(ime_datoteke) as datoteka:
             slovar_podatkov = json.load(datoteka)
         uporabnisko_ime = slovar_podatkov['uporabnisko_ime']
         geslo = slovar_podatkov['geslo']
-        matrika = slovar_podatkov['matrika']
-        uporabnik = cls.uporabnisko_ime, cls.geslo, cls.matrika
-        return uporabnik
+        seznam_matrik = slovar_podatkov['seznam_matrik']
+        return cls(uporabnisko_ime, geslo, seznam_matrik)
 
 class Matrika:
     def __init__(self, matrika):
