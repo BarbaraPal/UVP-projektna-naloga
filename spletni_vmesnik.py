@@ -80,6 +80,10 @@ def registracija():
 def odjava():
     bottle.response.delete_cookie('uporabnisko_ime', path='/')
     bottle.redirect('/')
+
+@bottle.get("/navodila/")
+def prikaz_navodil():
+    return odpri_stran("navodila.html")
     
 @bottle.get("/matrika/")
 def prikaz_matrike():
