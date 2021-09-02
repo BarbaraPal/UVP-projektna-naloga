@@ -45,43 +45,6 @@ class Matrika:
             for line in self.matrika
         )
 
-    def dodaj_stevilo(self, stevilo, vrstica, stolpec):
-        '''Doda število v matriko (ali že obstoječe število spremeni v drugo).'''
-        if str(stevilo) not in '123456789' or str(vrstica) not in '123456789' or str(stolpec) not in '123456789':
-            raise ValueError('Prosimo, da za vrstice, stolpce in števila izbirate števila od 1 do 9.')
-        else: 
-            stevilo = int(stevilo)
-            vrstica = int(vrstica)
-            stolpec = int(stolpec)
-        if len(str(stevilo)) != 1:
-            raise ValueError(f'{stevilo} ni primeren znak. Prosim izberite število od 1 do 9.')
-        elif int(vrstica) > 9 or int(vrstica) < 1:
-            raise ValueError('Ta vrstica ne obstaja.')
-        elif int(stolpec) > 9 or int(stolpec) < 1:
-            raise ValueError('Ta stolpec ne obstaja.')
-        else:
-            self.matrika[vrstica - 1][stolpec - 1] = stevilo
-
-    def odstrani_stevilo(self, vrstica, stolpec):
-        '''Odstrani število v matriki in ga nadomesti z vrednostjo 0.'''
-        if str(vrstica) not in '123456789' or str(stolpec) not in '123456789':
-            raise ValueError('Prosimo, da za vrstice, stolpce in števila izbirate števila od 1 do 9.')
-        else:
-            vrstica = int(vrstica)
-            stolpec = int(stolpec)
-        if self.matrika[vrstica - 1][stolpec - 1] == 0:
-            pass
-        elif vrstica > 9 or vrstica < 1:
-            raise ValueError('Ta vrstica ne obstaja.')
-        elif stolpec > 9 or stolpec < 1:
-            raise ValueError('Ta stolpec ne obstaja.')
-        else:
-            self.matrika[vrstica - 1][stolpec - 1] = 0
-
-    def izbrisi_cel_sudoku(self):
-        self.matrika = [9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0], 9 * [0]]
-        return Matrika(self.matrika)
-
     def najdi_naslednjo_prazno_celico(self, vrstica, stolpec):
         for i in range(vrstica, 9):
             for j in range(stolpec, 9):
