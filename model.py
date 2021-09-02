@@ -44,6 +44,62 @@ class Matrika:
             ", ".join([str(i) for i in line]) 
             for line in self.matrika
         )
+    
+    def kvadratek_ok(self):
+        for i in range(3):
+            for j in range(3):
+                for k in range(3):
+                    for l in range(3):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False
+                for k in range(3, 6):
+                    for l in range(3,6):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False
+                for k in range(6, 9):
+                    for l in range(6, 9):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False
+        for i in range(3, 6):
+            for j in range(3, 6):
+                for k in range(3):
+                    for l in range(3):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False
+                for k in range(3, 6):
+                    for l in range(3, 6):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False
+                for k in range(6, 9):
+                    for l in range(6, 9):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False
+        for i in range(6, 9):
+            for j in range(6, 9):
+                for k in range(3):
+                    for l in range(3):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False 
+                for k in range(3, 6):
+                    for l in range(3, 6):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False 
+                for k in range(6, 9):
+                    for l in range(6, 9):
+                        if self.matrika[i][k] == self.matrika[j][l] and self.matrika[j][l] != 0 and i != j and k != l:
+                            return False
+        return True 
+
+    def vrstica_in_stolpec_ok(self):
+        for i in range(9):
+            for j in range(9):
+                for k in range(9):
+                    for l in range(9):
+                        if self.matrika[i][k] == self.matrika[i][l] and self.matrika[i][l] != 0 and k != l:
+                            return False
+                        elif self.matrika[i][k] == self.matrika[j][k] and self.matrika[j][k] != 0 and i != j:
+                            return False
+        return True
 
     def najdi_naslednjo_prazno_celico(self, vrstica, stolpec):
         for i in range(vrstica, 9):
@@ -82,6 +138,8 @@ class Matrika:
         return False
 
     def resi(self):
+        if self.kvadratek_ok() == False or self.vrstica_in_stolpec_ok() == False:
+            raise ValueError('Sudokuja ni mogoče rešiti. Preverite ali ste pravilno vnesli vsa števila.')
         if self.resevanje() == False:
             raise ValueError('Sudokuja ni mogoče rešiti. Preverite ali ste pravilno vnesli vsa števila.')
         else:
