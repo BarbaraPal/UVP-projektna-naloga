@@ -13,7 +13,9 @@ class Uporabnik:
     @staticmethod
     def preveri_enakost_gesel(geslo1, geslo2):
         if geslo1 != geslo2:
-            raise ValueError('Gesli se ne ujemata!')
+            return False
+        else:
+            return True
 
     def shrani_matriko(self, ime_datoteke):
         slovar_podatkov = {
@@ -139,8 +141,8 @@ class Matrika:
 
     def resi(self):
         if self.kvadratek_ok() == False or self.vrstica_in_stolpec_ok() == False:
-            raise ValueError('Sudokuja ni mogoče rešiti. Preverite ali ste pravilno vnesli vsa števila.')
+            return False
         if self.resevanje() == False:
-            raise ValueError('Sudokuja ni mogoče rešiti. Preverite ali ste pravilno vnesli vsa števila.')
+            return False
         else:
             return Matrika(self.matrika)

@@ -32,7 +32,9 @@ def odpri_stran(stran):
     return bottle.template(
         stran,
         seznam_matrik = seznam_matrik, 
-        ime = ime)
+        ime = ime,
+        napaka=None
+        )
 
 @bottle.get("/")
 def zacetna_stran():
@@ -40,7 +42,7 @@ def zacetna_stran():
 
 @bottle.get('/prijava/')
 def prijava_get():
-    return bottle.template('prijava.html')
+    return bottle.template('prijava.html', napaka=None)
 
 @bottle.post('/prijava/')
 def prijava_post():
@@ -48,13 +50,16 @@ def prijava_post():
     geslo = bottle.request.forms.getunicode('geslo')
     zasifrirano_geslo = zasifriraj_geslo(geslo)
     if uporabnisko_ime not in uporabniki:
-        raise ValueError('''Uporabniško ime ne obstaja! 
-    Vpišite veljavno uporabniško ime ali se registrirajte.''')
-    else:
+        return bottle.template('prijava.html', napaka='Uporabniško ime ne obstaja! Vpišite veljavno uporabniško ime ali se registrirajte.')
+    try:
         uporabnik = uporabniki[uporabnisko_ime] 
         uporabnik.preveri_geslo(zasifrirano_geslo)
-    bottle.response.set_cookie('uporabnisko_ime', uporabnik.uporabnisko_ime, path='/', secret=SKRIVNOST_ZA_PISKOTKE)
-    bottle.redirect('/')
+        bottle.response.set_cookie('uporabnisko_ime', uporabnik.uporabnisko_ime, path='/', secret=SKRIVNOST_ZA_PISKOTKE)
+        bottle.redirect('/')
+    except ValueError as e:
+        return bottle.template(
+            "prijava.html", napaka=e.args[0]
+        )
 
 @bottle.post('/registracija/')
 def registracija():
@@ -64,17 +69,23 @@ def registracija():
     Uporabnik.preveri_enakost_gesel(geslo, potrditev)
     zasifrirano_geslo = zasifriraj_geslo(geslo)
     if uporabnisko_ime in uporabniki:
-        raise ValueError('Uporabniško ime je že zasedeno!')
-    else:
+        return bottle.template('prijava.html', napaka='Uporaniško ime je že zasedeno!')
+    elif not Uporabnik.preveri_enakost_gesel(geslo, potrditev):
+        return bottle.template('prijava.html', napaka='Gesli se ne ujemata!')
+    try:
         uporabnik = Uporabnik(
             uporabnisko_ime,
             zasifrirano_geslo,
             []
         )
         uporabniki[uporabnisko_ime] = uporabnik
-    bottle.response.set_cookie('uporabnisko_ime', uporabnik.uporabnisko_ime, path='/', secret=SKRIVNOST_ZA_PISKOTKE)
-    uporabnik.shrani_matriko(os.path.join('uporabniki', f'{uporabnik.uporabnisko_ime}.json'))
-    bottle.redirect('/')
+        bottle.response.set_cookie('uporabnisko_ime', uporabnik.uporabnisko_ime, path='/', secret=SKRIVNOST_ZA_PISKOTKE)
+        uporabnik.shrani_matriko(os.path.join('uporabniki', f'{uporabnik.uporabnisko_ime}.json'))
+        bottle.redirect('/')
+    except ValueError as e:
+        return bottle.template(
+            'prijava.html', napaka=e.args[0]
+        )
 
 @bottle.post('/odjava/')
 def odjava():
@@ -104,15 +115,18 @@ def resevanje_sudokuja():
         [int(bottle.request.forms['m81']), int(bottle.request.forms['m82']), int(bottle.request.forms['m83']), int(bottle.request.forms['m84']), int(bottle.request.forms['m85']), int(bottle.request.forms['m86']), int(bottle.request.forms['m87']), int(bottle.request.forms['m88']), int(bottle.request.forms['m89'])],
         [int(bottle.request.forms['m91']), int(bottle.request.forms['m92']), int(bottle.request.forms['m93']), int(bottle.request.forms['m94']), int(bottle.request.forms['m95']), int(bottle.request.forms['m96']), int(bottle.request.forms['m97']), int(bottle.request.forms['m98']), int(bottle.request.forms['m99'])]]
     matrika = Matrika(matrika)
-    resen_sudoku = matrika.resi()
-    resen_sudoku_po_vrsticah = str(resen_sudoku).split('\n')
-    mat = []
-    for j in range(9):
-        for i in range(9):
-            mat += resen_sudoku_po_vrsticah[j][3 * i]
-    seznam_matrik.append(mat)
-    shrani_trenutnega_uporabnika()
-    return bottle.template('resen_sudoku.html', celamatrika = mat, ime = ime, seznam_matrik = seznam_matrik)
+    if not matrika.resi():
+        return bottle.template("matrika.html", napaka="Sudokuja ni mogoče rešiti. Preverite ali ste pravilno vnesli vsa števila.")
+    else:
+        resen_sudoku = matrika.resi()
+        resen_sudoku_po_vrsticah = str(resen_sudoku).split('\n')
+        mat = []
+        for j in range(9):
+            for i in range(9):
+                mat += resen_sudoku_po_vrsticah[j][3 * i]
+        seznam_matrik.append(mat)
+        shrani_trenutnega_uporabnika()
+        return bottle.template('resen_sudoku.html', celamatrika = mat, ime = ime, seznam_matrik = seznam_matrik)
 
 @bottle.post("/matrika/")
 def brisanje_sudokuja():

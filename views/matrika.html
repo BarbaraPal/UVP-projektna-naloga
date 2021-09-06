@@ -124,6 +124,9 @@
     </table>
     
           <input type="submit" value="Reši sudoku">
+          % if napaka:
+          <p class="help is-danger", style="color: red">{{napaka}}</p>
+          % end
         </form>
   </div>
 </div>
